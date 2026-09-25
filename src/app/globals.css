@@ -1,0 +1,339 @@
+:root {
+  --bg: #f3f4ef;
+  --card: #fff;
+  --ink: #1f2a24;
+  --muted: #5f6b64;
+  --body: #33403a;
+  --sub: #4d5a52;
+  --faint: #6b776f;
+  --accent: #3f7a59;
+  --mint: #e3ede6;
+  --mintInk: #2f5e45;
+  --sand: #f6e6d6;
+  --sandInk: #8a4f2a;
+  --sandInk2: #6e4a33;
+  --quote: #4f2f1b;
+  --quoteMark: #c07a4c;
+  --dark: #1f2a24;
+  --darkInk: #f3f4ef;
+  --darkSub: #a9c4b2;
+  --darkLine: #3e5045;
+  --darkHover: #2e3d34;
+  --darkP: #c5d3c9;
+  --line: #e3e7e2;
+  --ph1: #eef1ec;
+  --ph2: #e6ebe5;
+  --nav: rgba(243, 244, 239, 0.85);
+  --glass: rgba(255, 255, 255, 0.92);
+  --ghost: #dfe6df;
+  --shadow: rgba(31, 42, 36, 0.08);
+}
+
+:root[data-theme="dark"] {
+  --bg: #111713;
+  --card: #1a221d;
+  --ink: #e6ece8;
+  --muted: #9eaba3;
+  --body: #cdd6d0;
+  --sub: #b4c0b9;
+  --faint: #8a978f;
+  --accent: #82c7a0;
+  --mint: #1d3127;
+  --mintInk: #a9d6ba;
+  --sand: #2c231b;
+  --sandInk: #e2b58f;
+  --sandInk2: #d2ad8c;
+  --quote: #f1dcc8;
+  --quoteMark: #d69a6e;
+  --dark: #1f3027;
+  --darkInk: #eef3ef;
+  --darkSub: #a9cdb6;
+  --darkLine: #3a5144;
+  --darkHover: #2a3f33;
+  --darkP: #c2d2c7;
+  --line: #2a352e;
+  --ph1: #212a24;
+  --ph2: #1c241f;
+  --nav: rgba(17, 23, 19, 0.82);
+  --glass: rgba(26, 34, 29, 0.92);
+  --ghost: #243029;
+  --shadow: rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+.mono {
+  font-family: var(--font-mono), monospace;
+}
+
+/* Reveal-on-scroll animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Hover helpers (media-query aware so touch devices don't get stuck states) */
+@media (hover: hover) {
+  .hv-mint:hover {
+    background: var(--mint) !important;
+    color: var(--ink) !important;
+  }
+  .hv-accent:hover {
+    background: var(--accent) !important;
+    color: var(--bg) !important;
+  }
+  .hv-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 36px var(--shadow);
+  }
+  .hv-dark:hover {
+    background: var(--darkHover) !important;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Language toggle (sliding pill) ───────────────────────── */
+.lang-toggle {
+  position: relative;
+  display: flex;
+  background: var(--card);
+  padding: 4px;
+  border-radius: 999px;
+  isolation: isolate;
+}
+
+/* The highlight thumb slides between the two buttons. */
+.lang-thumb {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  border-radius: 999px;
+  background: var(--ink);
+  z-index: 0;
+  transform: translateX(0);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Move the thumb under the second button when EN is active. */
+.lang-toggle[data-active="en"] .lang-thumb {
+  transform: translateX(100%);
+}
+
+.lang-btn {
+  position: relative;
+  z-index: 1;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 11px;
+  min-width: 38px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  transition: color 0.25s ease, transform 0.2s ease;
+}
+
+.lang-btn.active {
+  color: var(--bg);
+}
+
+.lang-btn:active {
+  transform: scale(0.92);
+}
+
+/* ── Theme toggle (animated sun / moon) ───────────────────── */
+.theme-toggle {
+  position: relative;
+  border: 0;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--ink);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease;
+}
+
+.theme-toggle:active {
+  transform: scale(0.9);
+}
+
+.theme-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Light mode: show moon (offer to switch to dark). Dark mode: show sun. */
+.theme-toggle[data-theme="light"] .theme-icon-moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+.theme-toggle[data-theme="light"] .theme-icon-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.4);
+}
+.theme-toggle[data-theme="dark"] .theme-icon-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+.theme-toggle[data-theme="dark"] .theme-icon-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lang-thumb,
+  .lang-btn,
+  .theme-icon,
+  .theme-toggle {
+    transition: none;
+  }
+}
+
+/* ── Bottom navigation (mobile app style) ─────────────────── */
+/* Hidden by default; shown only on mobile. */
+.bottom-nav {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  /* Hide the top nav link pill — replaced by the bottom bar. */
+  .nav-links {
+    display: none !important;
+  }
+
+  /* Leave room so fixed bottom bar never covers content. */
+  .page-shell {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .bottom-nav {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+    background: var(--nav);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--line);
+  }
+
+  .bottom-nav-inner {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    gap: 2px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .bottom-nav-item {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 6px 2px;
+    border: 0;
+    background: transparent;
+    color: var(--faint);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 16px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.25s ease, background 0.25s ease;
+  }
+
+  .bottom-nav-item svg {
+    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .bottom-nav-item.active {
+    color: var(--accent);
+    background: var(--mint);
+  }
+
+  .bottom-nav-item.active svg {
+    transform: translateY(-1px) scale(1.08);
+  }
+
+  .bottom-nav-label {
+    line-height: 1;
+    letter-spacing: 0.01em;
+  }
+}
+
+@media (max-width: 760px) and (prefers-reduced-motion: reduce) {
+  .bottom-nav-item,
+  .bottom-nav-item svg {
+    transition: none;
+  }
+}
